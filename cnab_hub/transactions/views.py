@@ -1,57 +1,59 @@
-from django.shortcuts import render, HttpResponse
+from django.shortcuts import render
+from django.http import HttpResponseRedirect
 from django.db import models
-import pandas as pd
+from django.core.files.storage import default_storage
+from django.contrib import messages
 from .models import Transaction
 from .forms import UploadFileForm
-from django.http import HttpResponseRedirect
+import pandas as pd 
+from dateutil import parser
 
 
-
-#from somewhere import handle_uploaded_file
-
-
+def lista_operacoes(request):
+    operacoes = Transaction.objects.all()
+    total_saldo = Transaction.objects.aggregate(models.Sum('amount'))
+    return render(request, 'transactions_interface/lista_operacoes.html', {'operacoes': operacoes, 'total_saldo': total_saldo})
+   
 
 def upload_file(request):
     if request.method == 'POST':
         cnab_file = request.FILES['file']
         df = pd.read_csv(cnab_file, delimiter=' ', header=None)
         for index, row in df.iterrows():
-            type = row[1][0]
-            date= row[1:98]
-            amount = float(row[24:40])
-            cpf = row[19:29]
-            card = row[30:41]
-            hour = row[42:47]
-            owner = row[48:61]
-            store_name = row[62:80]
+            print(index)
+            print(row)
+            row_string = "".join(map(str,row))
+            print(row_string)
+
+            type = row_string[0]
+            print(type)
+            date= row_string[1:9]
+            print(date)
+            amount = row_string[9:19]
+            print(amount)
+            cpf = row_string[19:30]
+            print(cpf)
+            card = row_string[30:42]
+            print(card)
+            hour = row_string[42:48]
+            print(hour)
+            owner = row_string[48:63]
+            print(owner)
+            store_name = row_string[63:]
+            print(store_name)
 
             Transaction.objects.create(
                 type = type,
-                date=date,
+                date= date,
                 store_name=store_name,
                 amount=amount,
                 cpf=cpf,
                 card=card,
                 hour=hour,
                 owner=owner)
-        return HttpResponseRedirect('transactions/lista_operacoes/')
+        return HttpResponseRedirect('transactions_interface/lista_operacoes/')
     else:
-        return render(request, 'transactions/upload.html')    
-
-def upload(request):
-    return render(request, 'upload.html')
+        return render(request, 'transactions_interface/upload.html')    
+ 
 
 
-def lista_operacoes(request):
-    operacoes = Transaction.objects.all()
-    total_saldo = Transaction.objects.aggregate(models.Sum('saldo_conta'))
-    return render(request, 'transactions/lista_operacoes.html', {'operacoes': operacoes, 'total_saldo': total_saldo})
-   
-
-
-""" def transactions(request):
-    transactions = Transaction.objects.all()
-    transactions_data = []
-    for transaction in transactions:
-        transactions_data.append({'store_name': transaction.store_name, 'amount': transaction.amount, 'date': transaction.date})
-    return JsonResponse({'transactions': transactions_data}) """

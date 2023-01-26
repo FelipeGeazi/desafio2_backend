@@ -9,19 +9,23 @@
       <tr>
         <th>Tipo de operação</th>
         <th>Data</th>
-        <th>Código do lojista</th>
-        <th>Saldo em conta</th>
-        <th>Nome do lojista</th>
-        <th>Nome da loja</th>
+        <th>Valor</th>
+        <th>CPF</tr>
+        <th>Cartão</th>
+        <th>Hora</th>
+        <th>Dono da Loja</th>
+        <th>Nome da Loja</th>
       </tr>
       {% for operacao in operacoes %}
       <tr>
-        <td>{{ operacao.tipo_operacao }}</td>
-        <td>{{ operacao.data_operacao }}</td>
-        <td>{{ operacao.codigo_lojista }}</td>
-        <td>{{ operacao.saldo_conta }}</td>
-        <td>{{ operacao.nome_lojista }}</td>
-        <td>{{ operacao.nome_loja }}</td>
+        <td>{{ operacao.type }}</td>
+        <td>{{ operacao.date }}</td>
+        <td>{{ operacao.amount}}</td>
+        <td>{{ operacao.cpf}}</td>
+        <td>{{ operacao.card }}</td>
+        <td>{{ operacao.hour }}</td>
+        <td>{{ operacao.owner}}</td>
+        <td>{{ operacao.store_name}}</td>
       </tr>
       {% endfor %}
     </table>
