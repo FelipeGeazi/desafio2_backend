@@ -50,16 +50,12 @@ def upload_file(request):
             print(owner)
             store_name = row_string[62:]
             print(store_name)
+            
+            obj = { 'type': type, 'date': date, 'store_name': store_name, 'amount': amount, 'cpf': cpf, 'card': card, 'hour': hour, 'owner': owner }
 
-            Transaction.objects.create(
-                type = type,
-                date= date,
-                store_name=store_name,
-                amount=amount,
-                cpf=cpf,
-                card=card,
-                hour=hour,
-                owner=owner)
+            serializer = TransactionSerializer(data = obj)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
         return HttpResponseRedirect('lista_operacoes/')
     else:
         return render(request, 'transactions_interface/upload.html')    
