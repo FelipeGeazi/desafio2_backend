@@ -5,8 +5,9 @@ from django.core.files.storage import default_storage
 from django.contrib import messages
 from .models import Transaction
 from .forms import UploadFileForm
+from .serializers import TransactionSerializer
 import pandas as pd 
-from dateutil import parser
+
 
 
 def lista_operacoes(request):
@@ -16,15 +17,23 @@ def lista_operacoes(request):
    
 
 def upload_file(request):
+   
     if request.method == 'POST':
-        cnab_file = request.FILES['file']
-        df = pd.read_csv(cnab_file, delimiter=' ', header=None)
-        for index, row in df.iterrows():
-            print(index)
-            print(row)
-            row_string = "".join(map(str,row))
-            print(row_string)
+        form = UploadFileForm(request.POST, request.FILES)
+        
+        with open('transactions/arquivos/cnab.txt', 'wb+') as destination:
+            for chunk in request.FILES['file'].chunks():
+                destination.write(chunk)
+        with open('transactions/arquivos/cnab.txt', 'r') as f:
+            lista_de_listas = []
+            for linha in f.read().split("\n"):
+                lista_de_listas.append(linha) 
+            print(lista_de_listas)   
 
+        for row_string in lista_de_listas:       
+            print(row_string)    
+            print(lista_de_listas)
+            
             type = row_string[0]
             print(type)
             date= row_string[1:9]
@@ -37,9 +46,9 @@ def upload_file(request):
             print(card)
             hour = row_string[42:48]
             print(hour)
-            owner = row_string[48:63]
+            owner = row_string[48:62]
             print(owner)
-            store_name = row_string[63:]
+            store_name = row_string[62:]
             print(store_name)
 
             Transaction.objects.create(
@@ -51,7 +60,7 @@ def upload_file(request):
                 card=card,
                 hour=hour,
                 owner=owner)
-        return HttpResponseRedirect('transactions_interface/lista_operacoes/')
+        return HttpResponseRedirect('lista_operacoes/')
     else:
         return render(request, 'transactions_interface/upload.html')    
  
