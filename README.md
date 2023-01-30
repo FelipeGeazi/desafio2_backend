@@ -1,18 +1,16 @@
 # desafio2_backend
 A Aplicação consiste em parsear arquivos de texto(CNBA) e salvar suas informações  em uma base de dados. 
 
-
-## Configurando o Ambiente de Desenvolvimento
-
-Para configurar o ambiente de desenvolvimento, você precisará criar um ambiente virtual (VENV) e instalar as dependências necessárias.
-
 ## Tecnologias Utilizadas
 
  - Python 
  - Django
  - DjangoRestFrameWork
- 
 
+
+## Configurando o Ambiente de Desenvolvimento
+
+Para configurar o ambiente de desenvolvimento, você precisará criar um ambiente virtual (VENV) e instalar as dependências necessárias.
 
 ### Criando o Ambiente Virtual (VENV)
 
