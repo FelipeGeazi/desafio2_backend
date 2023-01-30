@@ -6,6 +6,14 @@ A Aplicação consiste em parsear arquivos de texto(CNBA) e salvar suas informa�
 
 Para configurar o ambiente de desenvolvimento, você precisará criar um ambiente virtual (VENV) e instalar as dependências necessárias.
 
+## Tecnologias Utilizadas
+
+ - Python 
+ - Django
+ - DjangoRestFrameWork
+ 
+
+
 ### Criando o Ambiente Virtual (VENV)
 
 1. Abra o terminal e navegue até a pasta onde deseja criar o ambiente virtual.
