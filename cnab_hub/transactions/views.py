@@ -11,12 +11,29 @@ import locale
 from django.db.models import Sum
 
 
+""" def lista_operacoes(request):
+    data = Transaction.objects.all()
+    store_names = Transaction.objects.values_list('store_name', flat=True).distinct()
+    operacoes = Transaction.objects.values('store_name').annotate(total_amount=Sum('amount'))
+    return render(request, 'transactions_interface/lista_operacoes.html', {'operacoes': operacoes, 'store_names': store_names, 'data': data}) """
+
+
 def lista_operacoes(request):
     data = Transaction.objects.all()
     store_names = Transaction.objects.values_list('store_name', flat=True).distinct()
     operacoes = Transaction.objects.values('store_name').annotate(total_amount=Sum('amount'))
-    print(operacoes)
+
+    for operacao in operacoes:
+        operacao['total_amount'] = sum(
+            [
+                transacao.amount if transacao.type not in [2, 3, 9] else -transacao.amount
+                for transacao in data
+                if transacao.store_name == operacao['store_name']
+            ]
+        )
+
     return render(request, 'transactions_interface/lista_operacoes.html', {'operacoes': operacoes, 'store_names': store_names, 'data': data})
+           
 
 
 def upload_file(request):
