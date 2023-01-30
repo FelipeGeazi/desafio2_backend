@@ -10,7 +10,7 @@ class TransactionSerializer(serializers.ModelSerializer):
         model = Transaction
         fields = ('type', 'date', 'amount', 'cpf', 'card', 'hour', 'owner', 'store_name')
 
-    def get_amount(self, obj):
-        amount1= amount/ 100
-        amount = locale.currency(amount1, grouping=True)
-        return amount
+    def to_representation(self, instance):
+        if instance.type == 2:
+            instance.amount = "-" + str(instance.amount)
+        return super().to_representation(instance)

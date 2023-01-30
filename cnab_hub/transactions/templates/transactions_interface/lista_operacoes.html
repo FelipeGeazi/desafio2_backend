@@ -5,30 +5,25 @@
   </head>
   <body>
     <h1>Lista de operações</h1>
+    {% for operacao in operacoes %}
+    <h3>Loja: {{operacao.store_name}}</h3>
     <table>
       <tr>
         <th>Tipo de operação</th>
         <th>Data</th>
         <th>Valor</th>
-        <th>CPF</tr>
-        <th>Cartão</th>
-        <th>Hora</th>
-        <th>Dono da Loja</th>
-        <th>Nome da Loja</th>
       </tr>
-      {% for operacao in operacoes %}
+      {% for transacao in data %}
+      {% if transacao.store_name == operacao.store_name %}
       <tr>
-        <td>{{ operacao.type }}</td>
-        <td>{{ operacao.date }}</td>
-        <td>{{ operacao.amount}}</td>
-        <td>{{ operacao.cpf}}</td>
-        <td>{{ operacao.card }}</td>
-        <td>{{ operacao.hour }}</td>
-        <td>{{ operacao.owner}}</td>
-        <td>{{ operacao.store_name}}</td>
+        <td>{{ transacao.type }}</td>
+        <td>{{ transacao.date }}</td>
+        <td>R$ {{ transacao.amount}}</td>
       </tr>
+      {% endif %}
       {% endfor %}
     </table>
-    <p>Total de saldo: {{ total_saldo.saldo_conta__sum }}</p>
+    <p>Total de saldo: R$ {{operacao.total_amount}}</p>
+    {% endfor %}
   </body>
 </html>

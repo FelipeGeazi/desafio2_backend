@@ -7,14 +7,17 @@ from .models import Transaction
 from .forms import UploadFileForm
 from .serializers import TransactionSerializer
 import pandas as pd 
-
+import locale
+from django.db.models import Sum
 
 
 def lista_operacoes(request):
-    operacoes = Transaction.objects.all()
-    total_saldo = Transaction.objects.aggregate(models.Sum('amount'))
-    return render(request, 'transactions_interface/lista_operacoes.html', {'operacoes': operacoes, 'total_saldo': total_saldo})
-   
+    data = Transaction.objects.all()
+    store_names = Transaction.objects.values_list('store_name', flat=True).distinct()
+    operacoes = Transaction.objects.values('store_name').annotate(total_amount=Sum('amount'))
+    print(operacoes)
+    return render(request, 'transactions_interface/lista_operacoes.html', {'operacoes': operacoes, 'store_names': store_names, 'data': data})
+
 
 def upload_file(request):
    
@@ -28,30 +31,22 @@ def upload_file(request):
             lista_de_listas = []
             for linha in f.read().split("\n"):
                 lista_de_listas.append(linha) 
-            print(lista_de_listas)   
+             
 
         for row_string in lista_de_listas:       
-            print(row_string)    
-            print(lista_de_listas)
+          
             
             type = row_string[0]
-            print(type)
             date= row_string[1:9]
-            print(date)
             amount = row_string[9:19]
-            print(amount)
             cpf = row_string[19:30]
-            print(cpf)
             card = row_string[30:42]
-            print(card)
             hour = row_string[42:48]
-            print(hour)
             owner = row_string[48:62]
-            print(owner)
             store_name = row_string[62:]
-            print(store_name)
+
             
-            obj = { 'type': type, 'date': date, 'store_name': store_name, 'amount': amount, 'cpf': cpf, 'card': card, 'hour': hour, 'owner': owner }
+            obj = { 'type': type, 'date': date, 'store_name': store_name, 'amount': float(amount)/100, 'cpf': cpf, 'card': card, 'hour': hour, 'owner': owner }
 
             serializer = TransactionSerializer(data = obj)
             serializer.is_valid(raise_exception=True)
