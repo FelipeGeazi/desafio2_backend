@@ -11,6 +11,11 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -37,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.postgres',
     'rest_framework',
     'transactions',
 ]
@@ -75,12 +81,36 @@ WSGI_APPLICATION = 'cnab_hub.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-DATABASES = {
+
+# Lê as variáveis de ambiente do arquivo .env
+
+driver = os.getenv('DB_DRIVER')
+host = os.getenv('DB_HOST')
+port = os.getenv('DB_PORT')
+database = os.getenv('DB_DATABASE')
+username = os.getenv('DB_USERNAME')
+password = os.getenv('DB_PASSWORD')
+
+""" DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
+} """
+
+# Configura o banco de dados
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.' + driver,
+        'NAME': database,
+        'USER': username,
+        'PASSWORD': password,
+        'HOST': host,
+        'PORT': port,
+    }
 }
+
+
 
 
 # Password validation
