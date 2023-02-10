@@ -45,7 +45,7 @@ DB_PASSWORD=sua_senha
 ## Rodando a Aplicação
 
 1. Dentro do ambiente virtual ativado, execute o comando "python manage.py runserver" para iniciar o servidor.
-2. Acesse "http://127.0.0.1:8000/" no seu navegador para verificar se a aplicação está funcionando corretamente.
+2. Acesse "http://127.0.0.1:8000/api/upload/" no seu navegador para verificar se a aplicação está funcionando corretamente.
 
 ## Observação:
 
