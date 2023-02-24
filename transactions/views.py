@@ -73,4 +73,3 @@ def upload_file(request):
         return render(request, 'transactions_interface/upload.html')    
  
 
-
